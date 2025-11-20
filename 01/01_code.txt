@@ -1,0 +1,67 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+#define COST_YANGKOCCHI 12000
+#define COST_BEVERAGE   2000
+
+int solution(int n, int k) {
+    int freeBeverage = n / 10;             // 서비스 음료 개수
+    int payBeverage = k - freeBeverage;    // 실제 지불해야 하는 음료 개수
+
+    // 문제 조건에서 n/10 <= k 보장 → payBeverage 음수가 될 일 없음
+    int answer = n * COST_YANGKOCCHI + payBeverage * COST_BEVERAGE;
+
+    printf("계산: %d*12000 + (%d - %d)*2000 = %d\n",
+        n, k, freeBeverage, answer);
+
+    return answer;
+}
+
+void print_help() {
+    cout << "사용법\n"
+         << "  -n <양꼬치 개수>\n"
+         << "  -k <음료수 개수>\n";
+}
+
+int main(int argc, char* argv[])
+{
+    int nYangKocchi = -1;
+    int nBeverage   = -1;
+
+    for (int i = 1; i < argc; ++i) {
+        string arg = argv[i];
+
+        if (arg == "-n" && i + 1 < argc) {
+            nYangKocchi = atoi(argv[++i]);
+        }
+        else if (arg == "-k" && i + 1 < argc) {
+            nBeverage = atoi(argv[++i]);
+        }
+    }
+
+    // 인자 검증
+    if (nYangKocchi < 0 || nBeverage < 0) {
+        print_help();
+        return 0;
+    }
+
+    if (nYangKocchi >= 1000) {
+        printf("양꼬치 개수는 1000 이하입니다.\n");
+        return 0;
+    }
+    if (nBeverage >= 1000) {
+        printf("음료수 개수는 1000 이하입니다.\n");
+        return 0;
+    }
+
+    printf("입력: 양꼬치 = %d, 음료수 = %d\n\n", nYangKocchi, nBeverage);
+
+    int totalPay = solution(nYangKocchi, nBeverage);
+
+    printf("\n총 지불액 = %d\n", totalPay);
+
+    return totalPay;
+}
